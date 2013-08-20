@@ -8,7 +8,7 @@ a signed token, and return the token to service A. Service A uses this token
 on subsequent calls to service B. Service B will accept this token as proof
 of authorization. 
 
-## Conjur Model
+## Permissions Model
 
 Services A and B are modeled as Groups. Each Group will contain the
 (one or multiple) running instances of the service.
@@ -84,10 +84,22 @@ If there is no token provided, the response is HTTP 401.
 
 If a token is provided but cannot be verified, the response is HTTP 403.
 
-## Hosted Service B
+## Hosted Services on Heroku
 
 Two instances of Service B are hosted in Heroku at:
 
 * service-accel-1-demo-conjur
 * service-accel-2-demo-conjur
 
+## Demonstration of Operation
+
+```
+$ ruby demo.rb $ns <snip>
+Warming up Heroku services
+	done
+Making initial request
+	done
+Making requests with service token to services B.1 and B.2
+....................
+	done
+```
