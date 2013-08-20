@@ -8,8 +8,8 @@ require 'conjur-asset-environment'
 
 $config = {}
 
-ENV['CONJUR_ACCOUNT'] = 'ci'
-ENV['CONJUR_STACK']   = 'ci'
+ENV['CONJUR_ACCOUNT'] = 'sandbox'
+ENV['CONJUR_STACK']   = 'v3'
 raise "No NS provided" unless ns = $config[:ns] = ENV['NS']
 
 raise "No SERVICE_ID provided"   unless service_id = ENV['SERVICE_ID']
@@ -33,13 +33,15 @@ helpers do
 
   def authorize_by_conjur
     api = Conjur::API::new_from_token @token
-    resource = api.resource "ci:service:#{ns}/services/b"
-    if resource.permitted?('execute')
-      service_token = key.signed_token(@token.to_json)
-      headers['X-Service-Authorization'] = "Token token=\"#{Base64.strict_encode64 service_token.to_json}\""
-    else
-      false
+    resource = api.resource "sandbox:service:#{ns}/services/b"
+    begin
+      if resource.permitted?('execute')
+        @service_token = Base64.strict_encode64 key.signed_token(@token['data']).to_json
+        return true
+      end
+    rescue RestClient::Unauthorized
     end
+    false
   end
 
   def authorize
@@ -57,5 +59,12 @@ before do
 end
 
 get '/' do
-  'OK'
+  response = {
+    message: 'OK'
+  }
+  if @service_token
+    response[:service_token] = @service_token
+  end
+
+  response.to_json
 end
