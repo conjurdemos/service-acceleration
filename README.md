@@ -8,14 +8,18 @@ a signed token, and return the token to service A. Service A uses this token
 on subsequent calls to service B. Service B will accept this token as proof
 of authorization. 
 
+Multiple instances of service B will be running simultaneously. A token
+issued by any service B instance will be accepted by the other instances.
+
 ## Permissions Model
 
 Services A and B are modeled as Groups. Each Group will contain the
 (one or multiple) running instances of the service.
 
 A key escrow Environment is created for service B. An RSA key pair is 
-created and loaded into this Environment. Service Group A is granted
-*execute* permission on service B. 
+created and loaded into this Environment. 
+
+Service Group A is granted *execute* permission on service B. 
 
 Three host identities are created and assigned to the service groups:
 
@@ -77,8 +81,8 @@ the request is permitted.
 
 If the token cannot be verified by the escrowed public key, a permission
 check with the Conjur authz service is performed. If the permission check
-passes, a new service token is created and signed with the escrowed private
-key. This token is returned to the caller in the response.
+is successful, a service token is created and signed with the escrowed private
+key. This service token is returned to the caller in the response.
 
 If there is no token provided, the response is HTTP 401.
 
@@ -92,6 +96,9 @@ Two instances of Service B are hosted in Heroku at:
 * service-accel-2-demo-conjur
 
 ## Demonstration of Operation
+
+demo.rb is a Ruby program which acts as service A and exercises the runtime
+operation.
 
 ```
 $ ruby demo.rb $ns <snip>
