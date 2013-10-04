@@ -9,7 +9,7 @@ require 'conjur-asset-environment'
 $config = {}
 
 ENV['CONJUR_ACCOUNT'] = 'sandbox'
-ENV['CONJUR_STACK']   = 'v3'
+ENV['CONJUR_STACK']   = 'v4'
 raise "No NS provided" unless ns = $config[:ns] = ENV['NS']
 
 raise "No SERVICE_ID provided"   unless service_id = ENV['SERVICE_ID']

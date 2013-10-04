@@ -54,15 +54,8 @@ Membership granted
 Membership granted
 Membership granted
 {
-  "id": {
-    "account": "sandbox",
-    "kind": "service",
-    "id": "19gj00/services/b"
-  },
-  "owner": {
-    "account": "sandbox",
-    "id": "user:admin"
-  },
+  "id": "sandbox:service:19gj00/services/b",
+  "owner": "sandbox:user:admin",
   "permissions": [
 
   ]
